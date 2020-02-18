@@ -1,0 +1,6 @@
+How many sides are there: What is the radius: Number of sides: 5
+Radius (in): 5
+
+Angle is 1.26 radians (72.0 degrees)
+Side is 5.88 inches
+Perimeter is 29.39 inches or 2.45 feet.
