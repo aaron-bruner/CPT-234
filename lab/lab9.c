@@ -58,6 +58,7 @@ int findHighest(int array[]) {
 
 	for (i = 0; i < arrSize; i++) {
 		if (array[i] > max) {
+			smax = max;
 			max = array[i];
 		}
 	}
