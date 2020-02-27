@@ -52,9 +52,8 @@ void initWithRandom(int array[]) {
 /* ----------------------------------------------------------------------------------------------- */
 int findHighest(int array[]) {
 
-    int i, max, smax;
+    int i, max;
 	max = array[0];
-	smax = array[0];
 
 	for (i = 0; i < arrSize; i++) {
 		if (array[i] > max) {
@@ -71,9 +70,7 @@ int findHighest(int array[]) {
 /* ----------------------------------------------------------------------------------------------- */
 int findSecondHighest(int array[]) {
 
-    int i, max, smax;
-	max = findHighest(array);
-	smax = array[0];
+    int i, max = findHighest(array), smax = array[0];
 
 	for (i = 0; i < arrSize; i++) {
         if (array[i] > smax && array[i] < max)
