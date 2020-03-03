@@ -1,3 +1,4 @@
+#include "defs.h"
 /* ----------------------------------------------------------------------------------------------- */
 /* description:  calculates the highest number in the array specified                              */
 /* inputs:  the name of the array wanting to be sorted                                             */

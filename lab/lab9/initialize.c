@@ -1,3 +1,4 @@
+#include "defs.h"
 /* ----------------------------------------------------------------------------------------------- */
 /* description:  asks the user to input twenty integers then stores them into the array specified. */
 /* inputs:  the name of the array                                                                  */

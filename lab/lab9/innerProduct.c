@@ -1,3 +1,4 @@
+#include "defs.h"
 /* ----------------------------------------------------------------------------------------------- */
 /* description:  calculates the inner product of the two arrays specified                          */
 /* inputs:  two arrays                                                                             */
