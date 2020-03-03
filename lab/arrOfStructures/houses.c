@@ -8,8 +8,6 @@ int main(void){
 	FILE *fp;
 	char filename[80];
 
-    printf("TEST");
-
 	printf("Input file : ");
 	scanf("%s", filename);
 	if ( (fp = fopen(filename,"r")) == NULL) {
