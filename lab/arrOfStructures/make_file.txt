@@ -1,0 +1,11 @@
+all:
+	gcc -o houses houses.c print_header.c print_one_house.c print_houses.c print_price.c print_bedrooms.c print_lot.c
+
+houses:
+	houses.o print_header.o print_one_house.o print_houses.o print_prices.o print_bedrooms.o print_lot.o
+
+run:
+	./houses
+
+clean:
+	rm houses.o print_header.o print_one_house.o print_houses.o print_prices.o print_bedrooms.o print_lot.o
