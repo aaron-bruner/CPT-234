@@ -58,8 +58,6 @@ int processLumens( int bulbNum, int numReadings) {
     int b[5];
     for (int i = 0; i < n; ++i) {
         scanf("%d", &b[i]);
-    }
-    for (int i = 0; i < n; ++i) {
         printf("%4d", b[i]);
     }
     int avg = 0;
