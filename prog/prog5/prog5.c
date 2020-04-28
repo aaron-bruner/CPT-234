@@ -9,33 +9,32 @@ Date:        ?
 #include <stdlib.h>
 
    // prototypes
-   void loadBulbs(int *lum, const int max, char *filename, double *pct, int *n);
-   void printBulbs(int *lum, int *n);
-   int minReading(int *lum, int *n);
-   int maxReading(int *lum, int *n);
-   int averageReading(int *lum, int *n);
-   int suspectCount(int *lum, int *n, int average, double *pct);
+   void loadBulbs(int *lum, int n, char *filename);
+   void countBulbs(char *filename, double *pct, int *n);
+   void printBulbs(int *lum, int n);
+   int minReading(int *lum, int n);
+   int maxReading(int *lum, int n);
+   int averageReading(int *lum, int n);
+   int suspectCount(int *lum, int n, int average, double pct);
    void printEquals();
 
 int main(int argc, char *argv[]) {
 
-   if( argc != 2)
+   if( argc != 2) {
       printf("Usage: %s filename\n", argv[0]);
-
-   // constants
-   const int MAX_READINGS = 200;
+      exit(2);
+   }
 
    // variables
-   //int readings[MAX_READINGS];
    
-   int *readings = (int*)malloc(MAX_READINGS * sizeof(int));
-   
-   int *n = malloc(sizeof(int));
+   int n = 0;
    int min, max, avg, suspect;
-   double *pct = malloc(sizeof(int));
+   double pct;
 
    // read percentage and readings and print readings
-   loadBulbs(readings, MAX_READINGS, argv[1], pct, n);
+   countBulbs(argv[1], &pct, &n);
+   int *readings = (int*)malloc(n * sizeof(int));
+   loadBulbs(readings, n, argv[1]);
    printBulbs(readings, n);
 
    // gather statistics
@@ -52,131 +51,110 @@ int main(int argc, char *argv[]) {
    printf("Maximum: %d\n", max);
    printf("Range: %d\n", max-min);
    printf("Average: %d\n", avg);
-   printf("Outside %.1f%%: %d = %.1f%%\n", pct, suspect, (suspect * 100.0) / (double)*n);
+   printf("Outside %.1f%%: %d = %.1f%%\n", pct, suspect, (suspect * 100.0) / n);
    printEquals();
    return 0;
 }
 
-void loadBulbs(int *lum, const int max, char *filename, double *pct, int *n) {
-/*    Read bulb readings and place in array
-      Exit if too many readings for array
-      Parameters: lum - readings arrray
-                  max - maximum elements in array
-      Return:     Number of readings placed in array
-*/
+void loadBulbs(int *lum, int n, char *filename) {
+
    FILE *fp;
    fp = fopen(filename, "r");
    if ( fp == NULL ) {
        printf("Could not open file\n");
-       exit(1);
+       exit(2);
    }
-
-   int i = 0, reading;
-
-
-   fscanf(fp, "%lf", pct);
-
-   // While able to read a reading
-   while (!feof(fp)) {
-      if (i >= max) {         // see if it will fit
-         printf("\nMore than %d readings!\n\n", max);
-         exit(1);
-      }
+    int test;
+    double trash;
+    fscanf(fp, "%lf", &trash);
+    for (int i = 0; i < n; i++) {
       fscanf(fp, "%d", lum+i);
-      i++;
-      *n+=1;
-   }               // return count
+      }
    fclose(fp);
-   *n-=1;
+   
 }
 
-void printBulbs(int *lum, int *n) {
-/*    Print bulb readings 10 per line preceed by headings
-      Parameters: lum - readings array
-                  n - number of elements in arrray
-*/
+void countBulbs(char *filename, double *pct, int *n) {
+
+   FILE *fp;
+   fp = fopen(filename, "r");
+   if ( fp == NULL ) {
+       printf("Could not open file\n");
+       exit(2);
+   }
+   
+   fscanf(fp, "%lf", pct);
+   
+   *n = 0;
+    int test;
+   while ( fscanf(fp, "%d", &test) == 1) {
+      *n+=1;
+   }
+   fclose(fp);
+}
+
+void printBulbs(int *lum, int n) {
 
    // print headings
    printEquals();
-   printf("%d Readings\n", *n);
+   printf("%d Readings\n", n);
    printEquals();
 
    // print readings
-   for (int i = 0; i < *n; i++) {
+   for (int i = 0; i < n; i++) {
       if (i % 10 == 0 && i != 0)
          printf("\n");
-      printf("%3d ", lum[i]);
+      printf("%3d ", *lum++);
    }
    printf("\n");   
 }
 
-int minReading(int *lum, int *n) {
-/*    Determine minimum reading
-      Parameters: lum - readings array
-                  n - number of elements in arrray
-      Return:     Minimum reading
-*/
-   int min;
+int minReading(int *lum, int n) {
 
-   min = lum[0];
-   for (int i = 1; i < *n; i++, *lum++) {
-      if (*lum < min)
-         min = *lum;
+   int min = *lum;
+   
+   for (int i = 1; i < n; i++) {
+      if (*(lum+i) < min)
+         min = *(lum+i);
+   }
    return min;
 }
 
-}
+int maxReading(int *lum, int n) {
 
-int maxReading(int *lum, int *n) {
-/*    Determine maximum reading
-      Parameters: lum - readings array
-                  n - number of elements in arrray
-      Return:     Maximum reading
-*/
-   int max;
+   int max = *lum;
 
-   max = lum[0];
-   for (int i = 1; i < *n; i++, *lum++)
-      if (*lum > max)
-         max = *lum;
+   for (int i = 1; i < n; i++)
+      if (*(lum+i) > max)
+         max = *(lum+i);
    return max;
 }
 
-int averageReading(int *lum, int *n) {
-/*    Determine average reading
-      Parameters: lum - readings array
-                  n - number of elements in arrray
-      Return:     Average reading
-*/
+int averageReading(int *lum, int n) {
+
    int i, total = 0, avg = 0;
 
-   for (i = 0; i < *n; i++)
-      total += *lum++;
-   avg = total / *n;
+   for (i = 0; i < n; i++)
+      total += *(lum+i);
+   avg = total / n;
    return avg;
 }
 
-int suspectCount(int *lum, int *n, int average, double *pct) {
-/*    Determine count of readings outside range
-      Parameters: lum - readings array
-                  n - number of elements in arrray
-                  average - average reading
-                  pct - percentage
-      Return:     Minimum reading
-*/
+int suspectCount(int *lum, int n, int average, double pct) {
+
    int i, count = 0;
    float radius, lower, upper;
 
    // calculate limits of range
-   //radius = average * (pct / 100.0);
+   radius = average * (pct / 100.0);
    lower = average - radius;
    upper = average + radius;
 
    // count readings outside range
-   for (i = 0; i < *n; i++) {
-      if (*lum < lower || *lum > upper) {
+   for (i = 0; i < n; i++) {
+      if (*(lum+i) < lower || *(lum+i) > upper) {
          count++; }
-   lum++;
+   *(lum+i);
    }
 
    return count;
