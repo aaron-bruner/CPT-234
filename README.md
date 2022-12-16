@@ -1,4 +1,6 @@
-# CPT234
-GVL TECH CPT 234
+# CPT 234 [C Programming I]
 
-Files based on CentOS8 USB install.
+## Course Description
+This introductory course in C programming emphasizes the designing, coding, testing and debugging of C programs involving input/output operations, data types, storage classes, decision structures, looping, functions, preprocessor directives, arrays and simple pointers.
+
+###### Files based on CentOS8 USB install.
